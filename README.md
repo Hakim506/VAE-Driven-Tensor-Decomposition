@@ -1,4 +1,4 @@
-# VAE-Driven-Tensor-Decomposition
+# VAE-Driven Tensor Decomposition
 
 This repository contains the code and models related to the research paper "VAE-Driven Tensor Decomposition: A Novel Architecture for Efficient Deep Learning".
 
