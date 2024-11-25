@@ -134,7 +134,7 @@ class VAE(nn.Module):
         KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
         return REC + KLD * coef
 
-    def fit(self, trainloader, valloader, epochs=10, learning_rate=1e-3, threshold=0.2, best=True, coef=10**-3):
+    def fit(self, trainloader, valloader, epochs=10, learning_rate=1e-3, threshold=0.2, best=True, coef=10**-3,print=True):
         optimizer = optim.Adam(self.parameters(), lr=learning_rate)
 
         best_metric = float('inf')
@@ -193,11 +193,11 @@ class VAE(nn.Module):
             display(Latex(f'Best {self.name} model at epoch {best_epoch} with error {best_metric:.5f}'))
 
         # Plot and show
-        self.plot()
-        self.show(valloader)
-
-        # t-SNE visualization
-        self.tsne_visualization_both_sets(trainloader, valloader)
+        if print:
+            self.plot()
+            self.show(valloader)
+            # t-SNE visualization
+            self.tsne_visualization_both_sets(trainloader, valloader)
 
     def plot(self):
         plt.figure(figsize=(15, 5))
@@ -281,6 +281,7 @@ class VAE(nn.Module):
         plt.text(0.5, 0.5, text, ha="center", va="center", fontsize=10, bbox=dict(facecolor='lightseagreen', alpha=0.5, pad=5))
         plt.axis('off')
         plt.show()
+        return avg_loss,avg_iou
 
     def tsne_visualization_both_sets(self, trainloader, valloader, num_images=1000, perplexity=20, n_iter=1500):
         self.load_state_dict(self.best_model_state_dict)
